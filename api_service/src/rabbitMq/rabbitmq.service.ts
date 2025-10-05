@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { connect, Connection, Channel } from 'amqplib';
-import { SendEmailMQ } from "src/user/dto/data/sendEmailMQ";
+import { SendEmailMQ } from "src/dto/data/sendEmailMQ";
 
 @Injectable()
 export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
