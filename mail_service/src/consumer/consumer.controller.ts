@@ -9,17 +9,12 @@ export class ConsumerController {
 
  
 
-  @MessagePattern('')
+  @MessagePattern('user.created')
   async handleConsume(@Payload() mess: any){
     const data: MessageDto = {
-      event: mess?.event,
       email: mess?.email,
-      message: mess?.event
+      message: mess?.message
     }
-    
-    if (data.event === 'user-created'){
-      this.consumerService.sendEmail(data)
-    }
-
+    this.consumerService.sendEmail(data)
   }
 }

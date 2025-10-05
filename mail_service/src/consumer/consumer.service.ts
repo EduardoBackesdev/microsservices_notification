@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { MessageDto } from 'src/dto/message.dto';
 import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class ConsumerService {
 
-    async sendEmail(m: MessageDto){
+    async sendEmail(m: any){
         const testAccount = await nodemailer.createTestAccount()
         const transporter = nodemailer.createTransport({
             host: 'smtp.ethereal.email',
@@ -16,7 +15,7 @@ export class ConsumerService {
             },
         })
         try {
-            await transporter.sendMail({
+            const a = await transporter.sendMail({
                 from: '"Suporte" <no-reply@meusite.com>',
                 to: m.email,
                 subject: 'Account Created!',
@@ -24,6 +23,7 @@ export class ConsumerService {
                 <p>${m.message}</p>
                 `,
             })
+            console.log(nodemailer.getTestMessageUrl(a))
         } catch (error) {
             throw new Error('Error with send email')
         }

@@ -26,7 +26,6 @@ export class UserService {
       password: passHash
     })
     const r: SendEmailMQ = {
-      event: 'user-created',
       email: user.email,
       message: "Congratulations, your account created with succesfull"
     }
@@ -34,13 +33,14 @@ export class UserService {
       Message: "Create user with success"
     }
     try {
-      await this.user.save(query)
-      await this.rabbit.publish(r)
-      return rs
+      const email = await this.user.findOne({where: {email: user.email}})
+      if(!email){
+        await this.user.save(query)
+        await this.rabbit.publish(r)
+        return rs
+      }
+      throw new BadRequestException('Fail to create your user!')
     } catch (error) {
-        if (error instanceof Error){
-          throw new BadRequestException(error.message)
-        }
         throw new BadRequestException('Fail to create your user!')
     }
   }
